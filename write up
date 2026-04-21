@@ -1,0 +1,126 @@
+Application on Trees (Binary Search Tree for Student Records)
+1. Scenario
+
+In a college system, student records need to be stored and accessed efficiently. Each student has a unique ID. Operations like inserting new students, searching for a student, and displaying student IDs in sorted order are frequently required.
+
+A Binary Search Tree (BST) is used to manage these student IDs efficiently:
+
+Smaller IDs go to the left subtree
+Larger IDs go to the right subtree
+This structure allows quick searching and sorted traversal.
+2. Justification
+
+Using a BST is appropriate because:
+
+It provides efficient search, insertion, and deletion operations.
+It maintains sorted order automatically using inorder traversal.
+Compared to linear structures (like arrays or linked lists), BST significantly reduces search time.
+
+Why BST over other structures?
+
+Arrays → slow insertion/deletion (O(n))
+Linked Lists → slow searching (O(n))
+BST → average-case efficient operations (O(log n))
+3. Algorithm and Time Complexity
+Insertion Algorithm
+If root is NULL → create a new node.
+If ID < root → insert in left subtree.
+If ID > root → insert in right subtree.
+Return root.
+
+Time Complexity:
+
+Best/Average Case: O(log n)
+Worst Case (skewed tree): O(n)
+Search Algorithm
+If root is NULL or ID matches → return node.
+If ID < root → search left subtree.
+Else → search right subtree.
+
+Time Complexity:
+
+Best/Average Case: O(log n)
+Worst Case: O(n)
+Inorder Traversal Algorithm
+Traverse left subtree
+Visit root
+Traverse right subtree
+
+Time Complexity:
+
+Always: O(n)
+4. Code (C Program)
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for BST Node
+struct Node {
+    int id;
+    struct Node *left, *right;
+};
+
+// Create new node
+struct Node* createNode(int id) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->id = id;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Insert node into BST
+struct Node* insert(struct Node* root, int id) {
+    if (root == NULL)
+        return createNode(id);
+
+    if (id < root->id)
+        root->left = insert(root->left, id);
+    else if (id > root->id)
+        root->right = insert(root->right, id);
+
+    return root;
+}
+
+// Search in BST
+struct Node* search(struct Node* root, int id) {
+    if (root == NULL || root->id == id)
+        return root;
+
+    if (id < root->id)
+        return search(root->left, id);
+
+    return search(root->right, id);
+}
+
+// Inorder traversal
+void inorder(struct Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->id);
+        inorder(root->right);
+    }
+}
+
+// Main function
+int main() {
+    struct Node* root = NULL;
+
+    // Insert sample student IDs
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
+
+    printf("Inorder Traversal (Sorted Student IDs): ");
+    inorder(root);
+
+    int key = 40;
+    if (search(root, key))
+        printf("\nStudent with ID %d found.\n", key);
+    else
+        printf("\nStudent with ID %d not found.\n", key);
+
+    return 0;
+}
